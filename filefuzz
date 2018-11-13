@@ -19,11 +19,35 @@ use warnings;
 use Getopt::Long qw(:config auto_version auto_help);
 use Pod::Usage;
 
-my %args = ('i' => '', 'b' => 0, 'o' => '');
+my %args = ('i' => '', 'b' => '', 'o' => '');
 GetOptions (\%args, "i=s", "b=s", "o=s", "r", "help") or pod2usage(2);
 
 if (defined($args{'help'})) { pod2usage(2); exit 127; }
-if ($args{'i'} eq '' || $args{'o'} eq '' || $args{b} eq '') { pod2usage(2); exit 127; }
+
+# is inputfile a file? also, NOT a directory?
+if ( !(-f $args{'i'}) || -d $args{'i'}) { 
+	warn "$args{'i'} is not a valid input file!\n\n";
+	pod2usage(2); exit 127; 
+}
+
+# has outputfile been set?
+if ($args{'o'} eq '') {
+	warn "Outputfile must be set with -o!\b\b";
+	podusage(2); exit 127;
+}
+
+# does outputfile already exist?
+if (-f $args{'o'}) {
+	warn "I will not overwrite existing file $args{'o'}.\n\n";
+	pod2usage(2); exit 127;
+}
+
+# has -b been set?
+if ($args{'b'} eq '') {
+	warn "You must use -b to tell me how many bits to flip in $args{'i'}.\n\n";
+	pod2usage(2); exit 127;
+}
+
 
 print "inputfile: $args{'i'}\n";
 print "bits: $args{'b'}\n";
