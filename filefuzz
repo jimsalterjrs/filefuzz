@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+
+# filefuzz flips a certain number of randomly chosen bits in a file, 
+# simulating the impact of random small-scale data degradation from eg
+# cosmic rays, cable or controller imperfections, etc.
+#
+# USAGE: filefuzz -i inputfile -b bits -o outputfile
+#
+# If bits is greater than or equal to 1, it will be treated as a total
+# number of bits to flip in inputfile. If bits is <1, it will be treated
+# as a percentage - ie, -b 0.01 will flip 1% of the total bits in inputfile.
+#
+# Filefuzz will tell you which bits it flipped (by offset address) in its
+# report to STDOUT.
+
+
