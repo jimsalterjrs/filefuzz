@@ -19,10 +19,35 @@ use warnings;
 use Getopt::Long qw(:config auto_version auto_help);
 use Pod::Usage;
 
-my %args = ('i' => '', 'b' => 0, 'o' => '', 'r' => '||||');
-GetOptions (\%args, "i=s", "b=f", "o=s", "r=s");
+my %args = ('i' => '', 'b' => 0, 'o' => '');
+GetOptions (\%args, "i=s", "b=s", "o=s", "r", "help") or pod2usage(2);
+
+if (defined($args{'help'})) { pod2usage(2); exit 127; }
+if ($args{'i'} eq '' || $args{'o'} eq '' || $args{b} eq '') { pod2usage(2); exit 127; }
 
 print "inputfile: $args{'i'}\n";
 print "bits: $args{'b'}\n";
 print "outputfile: $args{'o'}\n";
-print "reportfile: $args{'r'}\n";
+if (defined($args{'r'})) { print "Reporting to $args{'o'}.fuzzreport.txt\n"; }
+
+
+__END__
+
+=head1 NAME
+
+fuzzfile - a bit flipping tool for simulating bit rot
+
+=head1 SYNOPSIS
+
+fuzzfile -i inputfile -o outputfile -b bits [-r]
+
+Options:
+
+  -i inputfile		the source file to be fuzzed
+  -o outputfile		the target filespec to save the fuzzed file
+  -b bits		how many bits to flip in inputfile. may be
+			absolute number, or percentage
+  -r			optional: dump after-action report specifying all 
+			bits flipped to outputfile.fuzzreport.txt
+
+  --help		you're reading it now
